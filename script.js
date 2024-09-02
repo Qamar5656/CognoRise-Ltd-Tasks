@@ -1,20 +1,57 @@
+let currentInput = '';
+let operator = '';
+let previousInput = '';
 
-function calculateBMI(){
-    var height= (document.getElementById('height').value)/100;
-    var weight= (document.getElementById('weight').value);
-    var bmi= weight / (height * height);
-    document.getElementById('result').innerHTML="Your BMI is " + bmi.toFixed('2');
+function appendNumber(number) {
+    currentInput += number;
+    updateDisplay();
+}
 
-    if(bmi <= 17){
-        document.getElementById('message').innerHTML="Underweight";
+function setOperator(op) {
+    if (currentInput === '') return;
+    if (previousInput !== '') {
+        calculate();
     }
-    else if(bmi >=17.1 && bmi<=20){
-        document.getElementById('message').innerHTML="Good Health";
+    operator = op;
+    previousInput = currentInput;
+    currentInput = '';
+}
+
+function calculate() {
+    let result;
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+    if (isNaN(prev) || isNaN(current)) return;
+    switch (operator) {
+        case '+':
+            result = prev + current;
+            break;
+        case '-':
+            result = prev - current;
+            break;
+        case '*':
+            result = prev * current;
+            break;
+        case '/':
+            result = prev / current;
+            break;
+        default:
+            return;
     }
-    else if(bmi >=20.1 && bmi<=25){
-        document.getElementById('message').innerHTML="Overweight";
-    }
-    else{
-        document.getElementById('message').innerHTML="Not Good";
-    }
+    currentInput = result.toString();
+    operator = '';
+    previousInput = '';
+    updateDisplay();
+}
+
+function clearDisplay() {
+    currentInput = '';
+    operator = '';
+    previousInput = '';
+    updateDisplay();
+}
+
+function updateDisplay() {
+    const display = document.getElementById('display');
+    display.value = currentInput;
 }
